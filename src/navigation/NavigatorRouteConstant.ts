@@ -10,4 +10,7 @@ export const NavigatorRoute = {
     LANDING: 'landing',
     SAMPLE_DETAIL: 'sample_detail',
   },
+  MODAL: 'modal',
+  REGISTER: 'register',
+  LOGIN2: 'login2',
 };

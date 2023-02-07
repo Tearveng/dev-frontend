@@ -20,6 +20,10 @@ import {Image} from 'react-native';
 import BookmarkOutline from '@src/assets/logo/outline_bookmark.png';
 import TestComponent from '@src/screens/test_commponents';
 import {SlideScreen} from '@src/screens/slide';
+import {StyleSheet} from 'react-native';
+import ModalComponent from '@src/screens/modal/ModalComponent';
+import UserRegister from '@src/screens/user/userRegister';
+import UserLogin from '@src/screens/user/userLogin';
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -29,7 +33,7 @@ export function DrawerNavigator() {
     <>
       <Drawer.Navigator
         useLegacyImplementation
-        initialRouteName={NavigatorRoute.LOGIN}
+        initialRouteName={NavigatorRoute.LOGIN2}
       >
         <Drawer.Screen
           name={NavigatorRoute.SLIDE}
@@ -83,6 +87,30 @@ export function DrawerNavigator() {
           options={{
             headerShown: false,
             title: 'Sample UI Landing Screen',
+          }}
+        />
+        <Drawer.Screen
+          name={NavigatorRoute.MODAL}
+          component={ModalComponent}
+          options={{
+            headerShown: false,
+            title: 'Modal Page',
+          }}
+        />
+        <Drawer.Screen
+          name={NavigatorRoute.REGISTER}
+          component={UserRegister}
+          options={{
+            headerShown: false,
+            title: 'Register',
+          }}
+        />
+        <Drawer.Screen
+          name={NavigatorRoute.LOGIN2}
+          component={UserLogin}
+          options={{
+            headerShown: false,
+            title: 'Login_User',
           }}
         />
       </Drawer.Navigator>
@@ -179,10 +207,7 @@ export function RootNavigator() {
           headerLeft: () => <HeaderLeft />,
           headerRight: () => (
             <View mr={3}>
-              <Image
-                source={BookmarkOutline}
-                style={{width: 25, height: 25, tintColor: 'white'}}
-              />
+              <Image source={BookmarkOutline} style={styles.container} />
             </View>
           ),
           headerStyle: {
@@ -207,3 +232,7 @@ export type RootStackParamList = {
   Profile: {userId: string};
   Feed: {sort: 'latest' | 'top'} | undefined;
 };
+
+const styles = StyleSheet.create({
+  container: {width: 25, height: 25, tintColor: 'white'},
+});

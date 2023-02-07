@@ -1,10 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 import useReducer from '../features/user/user';
 import courseReducer from '@src/redux/features/courses/course';
+import randomUser from '../features/random_user/randomUser';
 export const store = configureStore({
   reducer: {
     user: useReducer,
     course: courseReducer,
+    randomusers: randomUser,
   },
 });
 

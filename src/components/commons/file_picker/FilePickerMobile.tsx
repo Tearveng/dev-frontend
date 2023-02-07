@@ -45,7 +45,9 @@ export const FilePickerMobile = ({onFileChange}: FilePickerMobileProps) => {
         path = path.substring(filePrefix.length);
         try {
           path = decodeURI(path);
-        } catch (error) {}
+        } catch (error) {
+          console.error(error);
+        }
       }
     }
     return path;

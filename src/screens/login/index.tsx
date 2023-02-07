@@ -11,23 +11,16 @@ import {
 } from 'native-base';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React from 'react';
-import {
-  faUser,
-  faLock,
-  faEyeSlash,
-  faEye,
-} from '@fortawesome/free-solid-svg-icons';
+import {faUser, faLock, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
 import {style} from '@styles/style';
-import {useFocusEffect} from '@react-navigation/native';
-import {login, LoginForm, validate} from '@src/redux/features/user/actions';
+import {login} from '@src/redux/features/user/actions';
 import {NavigatorRoute} from '@src/navigation/NavigatorRouteConstant';
 import {useAppSelector} from '@src/redux/config/hooks';
 import {MyForm} from '@components/commons/my_form';
@@ -37,49 +30,17 @@ export interface Props {
 }
 
 export function LoginScreen({navigation}: Props) {
-  const [userForm, setUserForm] = React.useState<LoginForm>({
-    email: '',
-    password: '',
-    isEmailValid: true,
-    isPasswordValid: true,
-    isSecure: true,
-    emailMessage: '',
-    passwordMessage: '',
-  });
   const user = useAppSelector(state => state.user);
-  useFocusEffect(
-    React.useCallback(() => {
-      setUserForm({
-        email: '',
-        password: '',
-        isEmailValid: true,
-        isPasswordValid: true,
-        isSecure: true,
-        emailMessage: '',
-        passwordMessage: '',
-      });
-    }, []),
-  );
-
-  const refEmail = React.useRef<TextInput>(null);
-  const refPassword = React.useRef<TextInput>(null);
 
   const flexDir = useBreakpointValue({
     base: 'row',
   });
 
-  const submit = () => {
-    validate(userForm);
-    if (userForm.isEmailValid && userForm.isPasswordValid) {
-      if (login(userForm, user)) {
-        navigation.navigate(NavigatorRoute.HOME);
-      } else if (!userForm.isEmailValid) {
-        refEmail.current?.focus();
-      } else if (!userForm.isPasswordValid) {
-        refPassword.current?.focus();
-      }
+  const submit = (data: any) => {
+    if (login(data, user)) {
+      navigation.navigate(NavigatorRoute.HOME);
     }
-    setTimeout(() => {}, 500);
+    console.log(data);
   };
 
   return (
@@ -126,7 +87,7 @@ export function LoginScreen({navigation}: Props) {
                     },
                   },
                   {
-                    secureTextEntry: userForm.isSecure,
+                    secureTextEntry: true,
                     name: 'password',
                     color: 'white',
                     isRequired: true,
@@ -147,18 +108,8 @@ export function LoginScreen({navigation}: Props) {
                       <FontAwesomeIcon icon={faLock} color="lightgray" />
                     ),
                     rightElement: (
-                      <Pressable
-                        onPress={() =>
-                          setUserForm(prevState => ({
-                            ...prevState,
-                            isSecure: !userForm.isSecure,
-                          }))
-                        }
-                      >
-                        <FontAwesomeIcon
-                          icon={userForm.isSecure ? faEyeSlash : faEye}
-                          color="lightgray"
-                        />
+                      <Pressable>
+                        <FontAwesomeIcon icon={faEyeSlash} color="lightgray" />
                       </Pressable>
                     ),
                   },

@@ -19,8 +19,8 @@ const ViewPdf = ({uri, width, height}: Props) => {
   const [numPages, setNumPages] = useState<number | null>(null);
   // const pageNumber = 1;
 
-  function onDocumentLoadSuccess({numPages}: any): void {
-    setNumPages(numPages);
+  function onDocumentLoadSuccess({numPages_copy}: any): void {
+    setNumPages(numPages_copy);
   }
   if (Platform.OS === 'web') {
     return (
@@ -59,8 +59,8 @@ const ViewPdf = ({uri, width, height}: Props) => {
         onError={(error: any) => {
           console.log(error);
         }}
-        onPressLink={(uri: any) => {
-          console.log(`Link pressed: ${uri}`);
+        onPressLink={(uri_copy: any) => {
+          console.log(`Link pressed: ${uri_copy}`);
         }}
         style={styles.pdf}
       />

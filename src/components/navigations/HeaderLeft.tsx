@@ -4,6 +4,7 @@ import {Box, Pressable} from 'native-base';
 import ChevronLeft from '@src/assets/logo/chevronLeft.png';
 import React from 'react';
 import {Image} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 const HeaderLeft = () => {
   const navigation =
@@ -22,13 +23,18 @@ const HeaderLeft = () => {
           }
         }}
       >
-        <Image
-          source={ChevronLeft}
-          style={{width: 35, height: 35, tintColor: 'white'}}
-        />
+        <Image source={ChevronLeft} style={styles.container} />
       </Pressable>
     </Box>
   );
 };
 
 export default HeaderLeft;
+
+const styles = StyleSheet.create({
+  container: {
+    width: 35,
+    height: 35,
+    tintColor: 'white',
+  },
+});

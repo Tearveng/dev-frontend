@@ -9,6 +9,7 @@ export interface LoginForm {
   emailMessage?: string | undefined;
   passwordMessage?: string | undefined;
 }
+
 export const validate = (userForm: LoginForm): void => {
   if (!userForm.email.includes('@')) {
     userForm.isEmailValid = false;
@@ -27,22 +28,23 @@ export const validate = (userForm: LoginForm): void => {
 };
 
 export const login = (userForm: LoginForm, user: User): boolean => {
-  if (userForm.email != user.email && userForm.password != user.password) {
+  if (userForm.email !== user.email && userForm.password !== user.password) {
     userForm.isEmailValid = false;
     userForm.emailMessage =
       'Adresse email et mot de passe non reconnus, merci de vérifier leur exactitude.';
-  } else if (userForm.email != user.email) {
+    return false;
+  } else if (userForm.email !== user.email) {
     userForm.isEmailValid = false;
     userForm.emailMessage =
       'Adresse email non reconnue, merci de vérifier leur exactitude.';
-  } else if (userForm.password != user.password) {
+    return false;
+  } else if (userForm.password !== user.password) {
     userForm.isPasswordValid = false;
     userForm.passwordMessage =
       'Mot de passe non reconnu, merci de vérifier leur exactitude.';
-  } else {
-    return true;
+    return false;
   }
-  return false;
+  return true;
 };
 
 export default {};

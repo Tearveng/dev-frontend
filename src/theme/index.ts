@@ -53,11 +53,20 @@ export const BaseTheme = extendTheme({
           fontSize: '32px',
         },
         md: {
+          fontFamily: 'ApanageBold',
           fontSize: '20px',
         },
         sm: {
+          fontFamily: 'Apana',
           fontSize: '14px',
         },
+      },
+    },
+  },
+  fontConfig: {
+    Apana: {
+      200: {
+        normal: 'ApanageBold.ttf',
       },
     },
   },
