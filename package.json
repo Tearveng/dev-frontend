@@ -8,13 +8,14 @@
     "android:prod": "SET ENVFILE=.env.production && react-native run-android",
     "ios:dev": "cp ./.env.development ./.env && react-native run-ios",
     "ios:prod": "cp ./.env.production ./.env && react-native run-ios",
-    "web:dev": "copy .\\.env.development .\\.env && cd web && webpack-dev-server",
+    "web:dev": "cp .\\.env.development .\\.env && cd web && webpack-dev-server",
     "web:build": "cd web && webpack ",
     "test": "jest",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "web:clone": "cd web && webpack-dev-server"
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "^7.18.9",

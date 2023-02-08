@@ -4,16 +4,6 @@ import {IconButton, Input, Stack, Text} from 'native-base';
 import React from 'react';
 import {Controller} from 'react-hook-form';
 
-// interface EyeProps {
-//   eyeOne: boolean;
-//   eyeTwo?: boolean;
-// }
-
-// interface InputProps {
-//   isEyeOn: EyeProps;
-//   setEyeOn: () => void;
-// }
-
 const CustomInput = ({
   control,
   errors,

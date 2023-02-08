@@ -8,7 +8,7 @@ import {useForm} from 'react-hook-form';
 import {LoginUser, loginUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
 
-const UserLogin = ({navigation}: any) => {
+export const UserLogin = ({navigation}: any) => {
   const {
     control,
     handleSubmit,
@@ -99,5 +99,3 @@ const UserLogin = ({navigation}: any) => {
     </TouchableWithoutFeedback>
   );
 };
-
-export default UserLogin;

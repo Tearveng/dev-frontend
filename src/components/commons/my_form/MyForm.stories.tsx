@@ -8,10 +8,7 @@ export default {
   title: 'Commons/Form',
   component: MyForm,
 } as ComponentMeta<typeof MyForm>;
-// const [data, setData] = useState<any | undefined>();
-// const [imageBuffer, setImageBuffer] = useState<ArrayBuffer | undefined>();
-// const [selectedValue, setSelectedValue] = useState('');
-// const [radioValue, setRadioValue] = useState('');
+
 const Template: ComponentStory<typeof MyForm> = args => (
   <View width={'50%'} height={'500px'}>
     <MyForm {...args} />
