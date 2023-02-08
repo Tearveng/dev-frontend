@@ -8,7 +8,7 @@
     "android:prod": "SET ENVFILE=.env.production && react-native run-android",
     "ios:dev": "cp ./.env.development ./.env && react-native run-ios",
     "ios:prod": "cp ./.env.production ./.env && react-native run-ios",
-    "web:dev": "cp .\\.env.development .\\.env && cd web && webpack-dev-server",
+    "web:dev": "copy .\\.env.development .\\.env && cd web && webpack-dev-server",
     "web:build": "cd web && webpack ",
     "test": "jest",
     "lint": "eslint .",

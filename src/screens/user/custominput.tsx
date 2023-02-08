@@ -4,16 +4,6 @@ import {IconButton, Input, Stack, Text} from 'native-base';
 import React from 'react';
 import {Controller} from 'react-hook-form';
 
-// interface EyeProps {
-//   eyeOne: boolean;
-//   eyeTwo?: boolean;
-// }
-
-// interface InputProps {
-//   isEyeOn: EyeProps;
-//   setEyeOn: () => void;
-// }
-
 const CustomInput = ({
   control,
   errors,
@@ -21,6 +11,7 @@ const CustomInput = ({
   md,
   icon,
   message,
+  key_id,
   ..._props
 }: any) => {
   return (
@@ -42,6 +33,7 @@ const CustomInput = ({
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
+            nativeID={key_id}
             onChangeText={onChange}
             onBlur={onBlur}
             value={value}

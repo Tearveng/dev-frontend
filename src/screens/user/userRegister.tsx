@@ -8,6 +8,7 @@ import {Keyboard, Platform} from 'react-native';
 import {useForm} from 'react-hook-form';
 import {RegisterUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserRegister = ({navigation}: any) => {
   const [isEyeOn1, setEyeOn1] = useState(false);
@@ -26,7 +27,15 @@ const UserRegister = ({navigation}: any) => {
     },
   });
 
-  const onSubmit = (data: RegisterUser) => {
+  const onSubmit = async (data: RegisterUser) => {
+    try {
+      await AsyncStorage.getItem('uid', (err, d) => {
+        d && console.log(d);
+        err && console.error(err);
+      });
+    } catch (e) {
+      console.error(e);
+    }
     console.log(data);
   };
 
@@ -47,6 +56,7 @@ const UserRegister = ({navigation}: any) => {
               <Center w="80" h="70px" rounded="md">
                 <Stack>
                   <CustomInput
+                    key_id="register_firstname"
                     base="300px"
                     md="400px"
                     icon={faUser}
@@ -61,6 +71,7 @@ const UserRegister = ({navigation}: any) => {
               <Center w="80" h="70px" rounded="md">
                 <Stack>
                   <CustomInput
+                    key_id="register_lastname"
                     base="300px"
                     md="400px"
                     icon={faUser}
@@ -76,6 +87,7 @@ const UserRegister = ({navigation}: any) => {
               <Center w="80" h="70px" rounded="md">
                 <Stack>
                   <CustomInput
+                    key_id="register_email"
                     base="300px"
                     md="400px"
                     icon={faEnvelope}
@@ -91,6 +103,7 @@ const UserRegister = ({navigation}: any) => {
               <Center w="80" h="60px" rounded="md">
                 <Stack>
                   <CustomInput
+                    key_id="register_password"
                     base="300px"
                     md="400px"
                     icon={faEye}
@@ -108,6 +121,7 @@ const UserRegister = ({navigation}: any) => {
               <Center w="80" h="60px" rounded="md">
                 <Stack>
                   <CustomInput
+                    key_id="register_con_password"
                     base="300px"
                     md="400px"
                     icon={faEye}

@@ -7,6 +7,7 @@ import {Keyboard, Platform} from 'react-native';
 import {useForm} from 'react-hook-form';
 import {LoginUser, loginUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const UserLogin = ({navigation}: any) => {
   const {
@@ -20,8 +21,21 @@ const UserLogin = ({navigation}: any) => {
     },
   });
 
+  const _storeData = async (_value: string) => {
+    try {
+      await AsyncStorage.setItem('uid', _value, err => {
+        err && console.error(err);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   const onSubmit = async (data: LoginUser) => {
     const result = await loginUser(data);
+    const {id} = result;
+
+    await _storeData(id);
     console.log(result);
   };
 
@@ -45,6 +59,7 @@ const UserLogin = ({navigation}: any) => {
             <Center w="80" h="70px" rounded="md">
               <Stack>
                 <CustomInput
+                  key_id="login_email"
                   base="300px"
                   md="400px"
                   icon={faEnvelope}
@@ -60,6 +75,7 @@ const UserLogin = ({navigation}: any) => {
             <Center w="80" h="60px" rounded="md">
               <Stack>
                 <CustomInput
+                  key_id="login_password"
                   base="300px"
                   md="400px"
                   icon={faEye}
