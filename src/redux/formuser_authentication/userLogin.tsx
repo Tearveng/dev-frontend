@@ -31,8 +31,10 @@ export const UserLogin = ({navigation}: any) => {
     <TouchableWithoutFeedback
       onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
       accessible={false}
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{overflow: 'hidden'}}
     >
-      <Center mt="80px" h="500px">
+      <Center mt="80px" h="full">
         <VStack space={4} alignItems="center">
           {/* <FormControl isInvalid> */}
           <Stack direction="column">
@@ -52,7 +54,17 @@ export const UserLogin = ({navigation}: any) => {
                   control={control}
                   message="Email is required"
                   type="email"
-                  placeholder="Email"
+                  placeholder="Emailll"
+                />
+                <CustomInput
+                  base="300px"
+                  md="400px"
+                  icon={faEnvelope}
+                  errors={errors.email}
+                  control={control}
+                  message="Email is required"
+                  type="email"
+                  placeholder="Emailll"
                 />
               </Stack>
             </Center>

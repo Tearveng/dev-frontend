@@ -33,6 +33,7 @@ const CustomInput = ({
         }}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
+            fontSize="16px"
             nativeID={key_id}
             onChangeText={onChange}
             onBlur={onBlur}

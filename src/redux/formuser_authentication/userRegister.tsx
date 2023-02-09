@@ -26,16 +26,18 @@ const UserRegister = ({navigation}: any) => {
     },
   });
 
-  const onSubmit = (data: RegisterUser) => {
-    console.log(data);
+  const onSubmit = (_data: RegisterUser) => {
+    // console.log(data);
   };
 
   return (
     <TouchableWithoutFeedback
       onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
       accessible={false}
+      // eslint-disable-next-line react-native/no-inline-styles
+      style={{overflow: 'hidden'}}
     >
-      <Center mt="80px">
+      <Center mt="80px" h="full">
         <VStack space={4} alignItems="center">
           <FormControl isInvalid>
             <Stack direction="column">

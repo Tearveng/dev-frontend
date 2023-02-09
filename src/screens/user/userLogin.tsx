@@ -45,6 +45,7 @@ const UserLogin = ({navigation}: any) => {
     <TouchableWithoutFeedback
       onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
       accessible={false}
+      style={{overflow: 'hidden'}}
     >
       <Center mt="80px" h="500px">
         <VStack space={4} alignItems="center">
