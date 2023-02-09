@@ -1,6 +1,6 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEyeSlash} from '@fortawesome/free-solid-svg-icons';
-import {IconButton, Input, Stack, Text} from 'native-base';
+import {faEyeSlash, faCaretDown} from '@fortawesome/free-solid-svg-icons';
+import {Button, IconButton, Input, Stack, Text} from 'native-base';
 import React from 'react';
 import {Controller} from 'react-hook-form';
 
@@ -66,9 +66,19 @@ const CustomInput = ({
               _props.type !== 'password' &&
               _props.type !== 'confirm_password' &&
               _props.type !== 'phone' ? (
-                <IconButton backgroundColor="transparent">
+                <Button backgroundColor="transparent">
                   <FontAwesomeIcon icon={_icon} />
-                </IconButton>
+                </Button>
+              ) : _props.type === 'phone' ? (
+                <Button
+                  outlineStyle="none"
+                  variant="unstyled"
+                  endIcon={<FontAwesomeIcon icon={faCaretDown} size={10} />}
+                  onPress={() => _props.modal(true)}
+                >
+                  {/* <FontAwesomeIcon icon={_icon} /> */}
+                  <Text color="black"> + {_props.countryCode.callingCode}</Text>
+                </Button>
               ) : undefined
             }
             InputRightElement={

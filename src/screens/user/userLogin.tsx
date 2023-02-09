@@ -42,19 +42,20 @@ const UserLogin = ({navigation}: any) => {
   const [isEyeOn, setEyeOn] = useState(false);
 
   return (
-    <TouchableWithoutFeedback
-      onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
-      accessible={false}
-    >
-      <Center mt="80px" h="500px">
-        <VStack space={4} alignItems="center">
-          {/* <FormControl isInvalid> */}
-          <Stack direction="column">
-            <Center w="80" h="20">
-              <Text bold fontSize="xl" color="black">
-                Login
-              </Text>
-            </Center>
+    <KeyboardAvoidingView>
+      <TouchableWithoutFeedback
+        onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
+        accessible={false}
+      >
+        <Center mt="80px" h="500px">
+          <VStack space={4} alignItems="center">
+            {/* <FormControl isInvalid> */}
+            <Stack direction="column">
+              <Center w="80" h="20">
+                <Text bold fontSize="xl" color="black">
+                  Login
+                </Text>
+              </Center>
 
               <Center w="80" h="70px" rounded="md">
                 <Stack>

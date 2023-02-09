@@ -6,10 +6,10 @@ import {
   Text,
   Button,
   FormControl,
-  InputGroup,
-  InputLeftAddon,
-  Pressable,
-  InputRightAddon,
+  // InputGroup,
+  // InputLeftAddon,
+  // Pressable,
+  // InputRightAddon,
   // InputRightAddon,
 } from 'native-base';
 
@@ -26,53 +26,64 @@ import {
 import {useForm} from 'react-hook-form';
 import {registerUser, RegisterUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
-import Country from 'react-native-country-picker-modal';
-import {CountryCode} from './type';
+import PhoneModal from './modal/modal';
+// import Country from 'react-native-country-picker-modal';
+// import {CountryCode} from './phone/type';
 
 const UserRegister = ({navigation}: any) => {
-  let contryPicker: JSX.Element = <></>;
   const [isEyeOn1, setEyeOn1] = useState(false);
   const [isEyeOn2, setEyeOn2] = useState(false);
-  const [show, setShow] = useState(false);
-  const [countryCode, setCountryCode] = useState('+855');
-  const [flag, setFlag] = useState<CountryCode>('KH');
+  const [modalVisible, setModalVisible] = useState(false);
+  // const [show, setShow] = useState(false);
+  const [countryCode, setCountryCode] = useState({
+    code: '',
+    callingCode: '855',
+    currency: '',
+    region: '',
+    subregion: '',
+    name: {
+      common: '',
+      fra: '',
+    },
+  });
+  // const [flag, setFlag] = useState<CountryCode>('KH');
 
-  if (Platform.OS !== 'web') {
-    const {CountryPicker} = require('react-native-country-codes-picker');
-    contryPicker = (
-      // <View>
-      //   <TouchableOpacity
-      //     onPress={() => setShow(true)}
-      //     style={{
-      //       width: '80%',
-      //       height: 60,
-      //       backgroundColor: 'black',
-      //       padding: 10,
-      //     }}
-      //   >
-      //     <Text
-      //       style={{
-      //         color: 'white',
-      //         fontSize: 20,
-      //       }}
-      //     >
-      //       {countryCode}
-      //     </Text>
-      //   </TouchableOpacity>
-      //   // For showing picker just put show state to show prop
-      //   <
-      // </View>
-      <CountryPicker
-        show={show}
-        // when picker button press you will get the country object with dial code
-        pickerButtonOnPress={(item: any) => {
-          setCountryCode(item.dial_code);
-          setShow(false);
-        }}
-        lang="en"
-      />
-    );
-  }
+  // if (Platform.OS !== 'web') {
+  //   const {CountryPicker} = require('react-native-country-codes-picker');
+  //   contryPicker = (
+  //     // <View>
+  //     //   <TouchableOpacity
+  //     //     onPress={() => setShow(true)}
+  //     //     style={{
+  //     //       width: '80%',
+  //     //       height: 60,
+  //     //       backgroundColor: 'black',
+  //     //       padding: 10,
+  //     //     }}
+  //     //   >
+  //     //     <Text
+  //     //       style={{
+  //     //         color: 'white',
+  //     //         fontSize: 20,
+  //     //       }}
+  //     //     >
+  //     //       {countryCode}
+  //     //     </Text>
+  //     //   </TouchableOpacity>
+  //     //   // For showing picker just put show state to show prop
+  //     //   <
+  //     // </View>
+  //     <CountryPicker
+  //       show={show}
+  //       // when picker button press you will get the country object with dial code
+  //       pickerButtonOnPress={(item: any) => {
+  //         // setCountryCode(item.dial_code);
+  //         setShow(false);
+  //       }}
+  //       lang="en"
+  //     />
+  //   );
+  // }
 
   const {
     control,
@@ -96,10 +107,6 @@ const UserRegister = ({navigation}: any) => {
     const response = await registerUser(data);
     console.log(response);
   };
-
-  console.log(Platform.OS);
-  console.log(show);
-  console.log(contryPicker);
 
   // @ts-ignore
   return (
@@ -165,29 +172,33 @@ const UserRegister = ({navigation}: any) => {
               </Center>
 
               <Center w="80" h="70px" rounded="md">
-                {/*<Stack>{contryPicker}</Stack>*/}
-                <InputGroup
+                <Stack>
+                  {/*<Stack>{contryPicker}</Stack>*/}
+                  {/* <InputGroup
                   w={{
                     base: '300px',
                     md: '400px',
                   }}
-                >
-                  <Pressable onPress={() => setShow(true)}>
+                > */}
+                  {/* <Pressable onPress={() => setShow(true)}>
                     <InputLeftAddon bgColor="transparent" key="left-1">
                       {countryCode}
                     </InputLeftAddon>
-                  </Pressable>
+                  </Pressable> */}
                   <CustomInput
                     key_id="register_phone"
-                    base="195px"
+                    base="300px"
                     md="400px"
+                    countryCode={countryCode}
+                    modal={setModalVisible}
+                    _icon={faEnvelope}
                     errors={errors.phone}
                     control={control}
                     message="Phone is required"
                     type="phone"
                     placeholder="Phone"
                   />
-                  <InputRightAddon bgColor="transparent" key="left-2">
+                  {/* <InputRightAddon bgColor="transparent" key="left-2">
                     <Country
                       countryCode={flag}
                       onSelect={e => {
@@ -202,8 +213,16 @@ const UserRegister = ({navigation}: any) => {
                       visible={show}
                       onClose={() => setShow(false)}
                     />
-                  </InputRightAddon>
-                </InputGroup>
+                  </InputRightAddon> */}
+                  {/* </InputGroup> */}
+                  <PhoneModal
+                    size="xl"
+                    countryCode={countryCode}
+                    setCountryCode={setCountryCode}
+                    modalVisible={modalVisible}
+                    setModalVisible={setModalVisible}
+                  />
+                </Stack>
               </Center>
 
               <Center w="80" h="60px" rounded="md">
