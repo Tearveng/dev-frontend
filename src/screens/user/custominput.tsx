@@ -9,9 +9,10 @@ const CustomInput = ({
   errors,
   base,
   md,
-  icon,
+  _icon,
   message,
   key_id,
+  _check_password,
   ..._props
 }: any) => {
   return (
@@ -26,6 +27,12 @@ const CustomInput = ({
                 /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
               const result = val.match(pattern);
               return result ? undefined : 'Email is Invalid.';
+            }
+
+            if (_props.type === 'confirm_password') {
+              return val !== _check_password
+                ? 'The passwords do not match'
+                : undefined;
             }
 
             return;
@@ -57,9 +64,10 @@ const CustomInput = ({
             }
             InputLeftElement={
               _props.type !== 'password' &&
-              _props.type !== 'confirm_password' ? (
+              _props.type !== 'confirm_password' &&
+              _props.type !== 'phone' ? (
                 <IconButton backgroundColor="transparent">
-                  <FontAwesomeIcon icon={icon} />
+                  <FontAwesomeIcon icon={_icon} />
                 </IconButton>
               ) : undefined
             }
@@ -70,7 +78,7 @@ const CustomInput = ({
                   backgroundColor="transparent"
                   onPress={() => _props.setEyeOn(!_props.isEyeOn)}
                 >
-                  <FontAwesomeIcon icon={_props.isEyeOn ? icon : faEyeSlash} />
+                  <FontAwesomeIcon icon={_props.isEyeOn ? _icon : faEyeSlash} />
                 </IconButton>
               ) : undefined
             }

@@ -72,6 +72,9 @@ module.exports = {
       resourceRegExp: /react-native-document-picker/,
     }),
     new webpack.IgnorePlugin({
+      resourceRegExp: /react-native-country-codes-picker/,
+    }),
+    new webpack.IgnorePlugin({
       resourceRegExp: /react-native-blob-util/,
     }),
     new Dotenv({
