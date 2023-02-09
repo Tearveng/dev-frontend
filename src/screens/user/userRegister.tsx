@@ -1,44 +1,107 @@
-import React, {useState} from 'react';
-import {VStack, Center, Stack, Text, Button, FormControl} from 'native-base';
+import React, {useRef, useState} from 'react';
+import {
+  VStack,
+  Center,
+  Stack,
+  Text,
+  Button,
+  FormControl,
+  InputGroup,
+  InputLeftAddon,
+  Pressable,
+  InputRightAddon,
+  // InputRightAddon,
+} from 'native-base';
 
 import {faUser, faEye, faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import {NavigatorRoute} from '@src/navigation/NavigatorRouteConstant';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {Keyboard, Platform} from 'react-native';
+import {
+  Keyboard,
+  Platform,
+  // Pressable,
+  // TouchableOpacity,
+  // View,
+} from 'react-native';
 import {useForm} from 'react-hook-form';
-import {RegisterUser} from './fetch/handleAuthentication';
+import {registerUser, RegisterUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import Country from 'react-native-country-picker-modal';
+import {CountryCode} from './type';
 
 const UserRegister = ({navigation}: any) => {
+  let contryPicker: JSX.Element = <></>;
   const [isEyeOn1, setEyeOn1] = useState(false);
   const [isEyeOn2, setEyeOn2] = useState(false);
+  const [show, setShow] = useState(false);
+  const [countryCode, setCountryCode] = useState('+855');
+  const [flag, setFlag] = useState<CountryCode>('KH');
+
+  if (Platform.OS !== 'web') {
+    const {CountryPicker} = require('react-native-country-codes-picker');
+    contryPicker = (
+      // <View>
+      //   <TouchableOpacity
+      //     onPress={() => setShow(true)}
+      //     style={{
+      //       width: '80%',
+      //       height: 60,
+      //       backgroundColor: 'black',
+      //       padding: 10,
+      //     }}
+      //   >
+      //     <Text
+      //       style={{
+      //         color: 'white',
+      //         fontSize: 20,
+      //       }}
+      //     >
+      //       {countryCode}
+      //     </Text>
+      //   </TouchableOpacity>
+      //   // For showing picker just put show state to show prop
+      //   <
+      // </View>
+      <CountryPicker
+        show={show}
+        // when picker button press you will get the country object with dial code
+        pickerButtonOnPress={(item: any) => {
+          setCountryCode(item.dial_code);
+          setShow(false);
+        }}
+        lang="en"
+      />
+    );
+  }
+
   const {
     control,
     handleSubmit,
     formState: {errors},
+    watch,
   } = useForm({
     defaultValues: {
-      first_name: '',
-      last_name: '',
+      first: '',
+      last: '',
       email: '',
       password: '',
       confirm_password: '',
+      phone: '',
     },
   });
+  const password = useRef({});
+  password.current = watch('password', '');
 
   const onSubmit = async (data: RegisterUser) => {
-    try {
-      await AsyncStorage.getItem('uid', (err, d) => {
-        d && console.log(d);
-        err && console.error(err);
-      });
-    } catch (e) {
-      console.error(e);
-    }
-    console.log(data);
+    const response = await registerUser(data);
+    console.log(response);
   };
 
+  console.log(Platform.OS);
+  console.log(show);
+  console.log(contryPicker);
+
+  // @ts-ignore
   return (
     <TouchableWithoutFeedback
       onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
@@ -59,11 +122,11 @@ const UserRegister = ({navigation}: any) => {
                     key_id="register_firstname"
                     base="300px"
                     md="400px"
-                    icon={faUser}
-                    errors={errors.first_name}
+                    _icon={faUser}
+                    errors={errors.first}
                     control={control}
                     message="Firstname is required"
-                    type="first_name"
+                    type="first"
                     placeholder="Firstname"
                   />
                 </Stack>
@@ -74,11 +137,11 @@ const UserRegister = ({navigation}: any) => {
                     key_id="register_lastname"
                     base="300px"
                     md="400px"
-                    icon={faUser}
-                    errors={errors.last_name}
+                    _icon={faUser}
+                    errors={errors.last}
                     control={control}
                     message="Lastname is required"
-                    type="last_name"
+                    type="last"
                     placeholder="Lastname"
                   />
                 </Stack>
@@ -90,7 +153,7 @@ const UserRegister = ({navigation}: any) => {
                     key_id="register_email"
                     base="300px"
                     md="400px"
-                    icon={faEnvelope}
+                    _icon={faEnvelope}
                     errors={errors.email}
                     control={control}
                     message="Email is required"
@@ -100,13 +163,55 @@ const UserRegister = ({navigation}: any) => {
                 </Stack>
               </Center>
 
+              <Center w="80" h="70px" rounded="md">
+                {/*<Stack>{contryPicker}</Stack>*/}
+                <InputGroup
+                  w={{
+                    base: '300px',
+                    md: '400px',
+                  }}
+                >
+                  <Pressable onPress={() => setShow(true)}>
+                    <InputLeftAddon bgColor="transparent" key="left-1">
+                      {countryCode}
+                    </InputLeftAddon>
+                  </Pressable>
+                  <CustomInput
+                    key_id="register_phone"
+                    base="195px"
+                    md="400px"
+                    errors={errors.phone}
+                    control={control}
+                    message="Phone is required"
+                    type="phone"
+                    placeholder="Phone"
+                  />
+                  <InputRightAddon bgColor="transparent" key="left-2">
+                    <Country
+                      countryCode={flag}
+                      onSelect={e => {
+                        setCountryCode(e.callingCode[0]);
+                        // @ts-ignore
+                        setFlag(e.cca2);
+                      }}
+                      withAlphaFilter={true}
+                      // withFlag={true}
+                      withModal={true}
+                      withCallingCode={true}
+                      visible={show}
+                      onClose={() => setShow(false)}
+                    />
+                  </InputRightAddon>
+                </InputGroup>
+              </Center>
+
               <Center w="80" h="60px" rounded="md">
                 <Stack>
                   <CustomInput
                     key_id="register_password"
                     base="300px"
                     md="400px"
-                    icon={faEye}
+                    _icon={faEye}
                     errors={errors.password}
                     control={control}
                     message="Password is required"
@@ -124,7 +229,7 @@ const UserRegister = ({navigation}: any) => {
                     key_id="register_con_password"
                     base="300px"
                     md="400px"
-                    icon={faEye}
+                    _icon={faEye}
                     errors={errors.confirm_password}
                     control={control}
                     message="Confirm Password is required"
@@ -132,6 +237,7 @@ const UserRegister = ({navigation}: any) => {
                     placeholder="Confirm Password"
                     isEyeOn={isEyeOn2}
                     setEyeOn={setEyeOn2}
+                    _check_password={password.current}
                   />
                 </Stack>
               </Center>

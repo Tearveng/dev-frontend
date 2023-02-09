@@ -6,18 +6,31 @@ export type LoginUser = {
   password: string;
 };
 
+export type PhoneNumber = {
+  ph_number: string;
+  callingCode: string;
+  code: string;
+  name: string;
+  region: string;
+  subregion: string;
+};
+
 export type RegisterUser = {
-  first_name: string;
-  last_name: string;
+  first: string;
+  last: string;
   email: string;
   password: string;
+  phone: string;
 };
 
 const loginUser = async (dataForm: LoginUser) => {
-  const data = await axios({
+  return await axios({
     method: 'post',
-    url: `${host}/login`,
-    data: dataForm,
+    url: `${host}/api/user/login`,
+    headers: {
+      'content-type': 'application/json',
+    },
+    data: JSON.stringify(dataForm),
   })
     .then(res => {
       return res.data;
@@ -26,14 +39,15 @@ const loginUser = async (dataForm: LoginUser) => {
       console.error(err);
       return err;
     });
-
-  return data;
 };
 
 const registerUser = async (dataForm: RegisterUser) => {
-  const data = await axios({
+  return await axios({
     method: 'post',
     url: `${host}/api/user`,
+    headers: {
+      'content-type': 'application/json',
+    },
     data: dataForm,
   })
     .then(res => res)
@@ -41,8 +55,6 @@ const registerUser = async (dataForm: RegisterUser) => {
       console.error(err);
       return err;
     });
-
-  return data;
 };
 
 export {loginUser, registerUser};
