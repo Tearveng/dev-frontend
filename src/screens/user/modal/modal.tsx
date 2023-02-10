@@ -1,6 +1,6 @@
 import {
   Box,
-  FlatList,
+  // FlatList,
   HStack,
   Image,
   Modal,
@@ -8,11 +8,11 @@ import {
   Spacer,
   Text,
   VStack,
+  Input,
+  View,
 } from 'native-base';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
-import {jsonCountry} from './countryJson';
-import {CountryCodeList} from '../phone/type';
 
 type ModalPhoneType = {
   modalVisible: boolean;
@@ -30,46 +30,10 @@ type ModalPhoneType = {
     };
   };
   setCountryCode: any;
+  search: string;
+  setSearch: any;
+  _countries: any[];
 };
-
-// type CountryData = {
-//   currency: string[];
-//   callingCode: string[];
-//   region: string;
-//   subregion: string;
-//   flag: string;
-//   name: {
-//     common: string;
-//     fra: string;
-//   };
-// };
-const mapCountry = () => {
-  let data: any[] = [];
-
-  Object.keys(jsonCountry).map((_key, index: number) => {
-    let newData = {
-      code: CountryCodeList[index],
-      currency: jsonCountry[CountryCodeList[index]],
-      callingCode: jsonCountry[CountryCodeList[index]].callingCode,
-      region: jsonCountry[CountryCodeList[index]].region,
-      subregion: jsonCountry[CountryCodeList[index]].subregion,
-      flag: jsonCountry[CountryCodeList[index]].flag,
-      name: {
-        common: jsonCountry[CountryCodeList[index]].name.common,
-        fra: jsonCountry[CountryCodeList[index]].name.fra,
-      },
-    };
-    data.push(newData);
-  });
-
-  return data;
-};
-
-// const Item = (data: any) => (
-//   <View>
-//     <Text>{data}</Text>
-//   </View>
-// );
 
 const PhoneModal = ({
   modalVisible,
@@ -77,13 +41,43 @@ const PhoneModal = ({
   size,
   countryCode,
   setCountryCode,
+  search,
+  setSearch,
+  _countries,
 }: ModalPhoneType) => {
+  // let data: JSX.Element[] = [];
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    handleFetchData();
+  }, []);
+
+  const handleFetchData = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 5000);
+  };
+
   return (
     <>
       <Modal isOpen={modalVisible} onClose={setModalVisible} size={size}>
         <Modal.Content maxH="512">
-          <Modal.CloseButton />
-          <Modal.Header>Return Policy</Modal.Header>
+          <Modal.Header>
+            <Input
+              variant="unstyled"
+              color="black"
+              type="text"
+              size="md"
+              w="300px"
+              mt="-5px"
+              maxLength={50}
+              placeholder="Search"
+              value={search}
+              onChangeText={e => setSearch(e)}
+            />
+            <Modal.CloseButton />
+          </Modal.Header>
           <Modal.Body>
             {/* <FlatList
                 data={mapCountry()}
@@ -91,13 +85,13 @@ const PhoneModal = ({
                 keyExtractor={item => item}
               /> */}
             {/* <Text>{JSON.stringify(mapCountry())}</Text> */}
-            <ScrollView>
-              <FlatList
-                data={mapCountry()}
-                renderItem={({item}) => (
+            <View>
+              {loading ? (
+                <Text>loading...</Text>
+              ) : (
+                _countries.map((item: any, index: number) => (
                   <Box
-                    nativeID={item.code}
-                    key={item.code}
+                    key={index}
                     borderBottomWidth="1"
                     _dark={{
                       borderColor: 'muted.50',
@@ -114,62 +108,64 @@ const PhoneModal = ({
                         setCountryCode({
                           ...countryCode,
                           callingCode: item.callingCode,
+                          code: item.code,
                         });
                         setModalVisible(false);
                       }}
                     >
-                      <HStack
-                        space={[2, 3]}
-                        justifyContent="space-between"
-                        nativeID={item.code}
-                        key={item.code}
-                      >
-                        <Image
+                      <ScrollView>
+                        <HStack
+                          space={[2, 3]}
+                          justifyContent="space-between"
+                          nativeID={item.code}
                           key={item.code}
-                          size="xs"
-                          resizeMode="cover"
-                          source={{
-                            uri: item.flag,
-                          }}
-                          alt={'Alternate Text ' + size}
-                        />
-                        <VStack>
+                        >
+                          <Image
+                            key={item.code}
+                            size="xs"
+                            resizeMode="cover"
+                            source={{
+                              uri: item.flag,
+                            }}
+                            alt={'Alternate Text ' + size}
+                          />
+                          <VStack>
+                            <Text
+                              _dark={{
+                                color: 'warmGray.50',
+                              }}
+                              color="coolGray.800"
+                              bold
+                            >
+                              {item.name.common}
+                            </Text>
+                            <Text
+                              color="coolGray.600"
+                              _dark={{
+                                color: 'warmGray.200',
+                              }}
+                            >
+                              {item.callingCode}
+                            </Text>
+                          </VStack>
+                          <Spacer />
                           <Text
+                            fontSize="xs"
                             _dark={{
                               color: 'warmGray.50',
                             }}
                             color="coolGray.800"
-                            bold
+                            alignSelf="flex-start"
                           >
-                            {item.name.common}
+                            {item.timeStamp}
                           </Text>
-                          <Text
-                            color="coolGray.600"
-                            _dark={{
-                              color: 'warmGray.200',
-                            }}
-                          >
-                            {item.callingCode}
-                          </Text>
-                        </VStack>
-                        <Spacer />
-                        <Text
-                          fontSize="xs"
-                          _dark={{
-                            color: 'warmGray.50',
-                          }}
-                          color="coolGray.800"
-                          alignSelf="flex-start"
-                        >
-                          {item.timeStamp}
-                        </Text>
-                      </HStack>
+                        </HStack>
+                      </ScrollView>
                     </Pressable>
                   </Box>
-                )}
-                keyExtractor={item => item.code}
-              />
-            </ScrollView>
+                ))
+              )}
+            </View>
           </Modal.Body>
         </Modal.Content>
       </Modal>

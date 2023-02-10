@@ -1,34 +1,15 @@
-import React, {useRef, useState} from 'react';
-import {
-  VStack,
-  Center,
-  Stack,
-  Text,
-  Button,
-  FormControl,
-  // InputGroup,
-  // InputLeftAddon,
-  // Pressable,
-  // InputRightAddon,
-  // InputRightAddon,
-} from 'native-base';
+import React, {useEffect, useRef, useState} from 'react';
+import {VStack, Center, Stack, Text, Button, FormControl} from 'native-base';
 
 import {faUser, faEye, faEnvelope} from '@fortawesome/free-solid-svg-icons';
 import {NavigatorRoute} from '@src/navigation/NavigatorRouteConstant';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
-import {
-  Keyboard,
-  Platform,
-  // Pressable,
-  // TouchableOpacity,
-  // View,
-} from 'react-native';
+import {Keyboard, Platform} from 'react-native';
 import {useForm} from 'react-hook-form';
 import {registerUser, RegisterUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
 import PhoneModal from './modal/modal';
-// import Country from 'react-native-country-picker-modal';
-// import {CountryCode} from './phone/type';
+import {mapCountry} from '@screens/user/modal/mapCountry';
 
 const UserRegister = ({navigation}: any) => {
   const [isEyeOn1, setEyeOn1] = useState(false);
@@ -36,7 +17,7 @@ const UserRegister = ({navigation}: any) => {
   const [modalVisible, setModalVisible] = useState(false);
   // const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState({
-    code: '',
+    code: 'KH',
     callingCode: '855',
     currency: '',
     region: '',
@@ -46,6 +27,20 @@ const UserRegister = ({navigation}: any) => {
       fra: '',
     },
   });
+
+  const [search, setSearch] = useState('');
+  const [countries, setCountries] = useState<any>([]);
+
+  useEffect(() => {
+    setCountries(
+      mapCountry().filter(item =>
+        search !== ''
+          ? item.name.common.toLowerCase().includes(search.toLowerCase())
+          : item,
+      ),
+    );
+  }, [search]);
+
   // const [flag, setFlag] = useState<CountryCode>('KH');
 
   // if (Platform.OS !== 'web') {
@@ -173,18 +168,6 @@ const UserRegister = ({navigation}: any) => {
 
               <Center w="80" h="70px" rounded="md">
                 <Stack>
-                  {/*<Stack>{contryPicker}</Stack>*/}
-                  {/* <InputGroup
-                  w={{
-                    base: '300px',
-                    md: '400px',
-                  }}
-                > */}
-                  {/* <Pressable onPress={() => setShow(true)}>
-                    <InputLeftAddon bgColor="transparent" key="left-1">
-                      {countryCode}
-                    </InputLeftAddon>
-                  </Pressable> */}
                   <CustomInput
                     key_id="register_phone"
                     base="300px"
@@ -198,30 +181,18 @@ const UserRegister = ({navigation}: any) => {
                     type="phone"
                     placeholder="Phone"
                   />
-                  {/* <InputRightAddon bgColor="transparent" key="left-2">
-                    <Country
-                      countryCode={flag}
-                      onSelect={e => {
-                        setCountryCode(e.callingCode[0]);
-                        // @ts-ignore
-                        setFlag(e.cca2);
-                      }}
-                      withAlphaFilter={true}
-                      // withFlag={true}
-                      withModal={true}
-                      withCallingCode={true}
-                      visible={show}
-                      onClose={() => setShow(false)}
+                  {modalVisible && (
+                    <PhoneModal
+                      size="xl"
+                      countryCode={countryCode}
+                      setCountryCode={setCountryCode}
+                      modalVisible={modalVisible}
+                      setModalVisible={setModalVisible}
+                      setSearch={setSearch}
+                      search={search}
+                      _countries={countries}
                     />
-                  </InputRightAddon> */}
-                  {/* </InputGroup> */}
-                  <PhoneModal
-                    size="xl"
-                    countryCode={countryCode}
-                    setCountryCode={setCountryCode}
-                    modalVisible={modalVisible}
-                    setModalVisible={setModalVisible}
-                  />
+                  )}
                 </Stack>
               </Center>
 

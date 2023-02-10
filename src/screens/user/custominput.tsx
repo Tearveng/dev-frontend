@@ -3,6 +3,21 @@ import {faEyeSlash, faCaretDown} from '@fortawesome/free-solid-svg-icons';
 import {Button, IconButton, Input, Stack, Text} from 'native-base';
 import React from 'react';
 import {Controller} from 'react-hook-form';
+import phoneValid from 'google-libphonenumber';
+const validate = phoneValid.PhoneNumberUtil.getInstance();
+
+// type CustomInputType = {
+//   control: Control<FieldValues, any>;
+//   handleSubmit: Promise<void>;
+//   errors: {email: string};
+//   base: string;
+//   md: string;
+//   _icon: IconDefinition;
+//   message: string;
+//   key_id: string;
+//   _check_password: string;
+//   _props: any;
+// };
 
 const CustomInput = ({
   control,
@@ -26,13 +41,65 @@ const CustomInput = ({
               const pattern =
                 /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
               const result = val.match(pattern);
-              return result ? undefined : 'Email is Invalid.';
+              return result ? '' : 'Email is Invalid.';
             }
 
             if (_props.type === 'confirm_password') {
               return val !== _check_password
                 ? 'The passwords do not match'
-                : undefined;
+                : '';
+            }
+
+            if (_props.type === 'phone') {
+              // console.log([val, _props.countryCode.code]);
+              if (val.length === 1) {
+                return 'Phone number is not match length.';
+              }
+
+              if (val.length > 1) {
+                const verify = validate.parseAndKeepRawInput(
+                  val,
+                  _props.countryCode.code,
+                );
+
+                const validatePhone = validate.isValidNumber(verify);
+                const validateLength = validate.isPossibleNumber(verify);
+                const codeVerify = verify.getCountryCode();
+                const nationalNumber = verify.getNationalNumber();
+                const extension = verify.getExtension();
+                const numberaw = verify.getRawInput();
+
+                console.log({
+                  coountryCode: _props.countryCode.code,
+                  codeVerify: codeVerify,
+                  nationalNumber: nationalNumber,
+                  extension: extension,
+                  numberaw: numberaw,
+                  validateLength: validateLength,
+                  validatePhone: validatePhone,
+                });
+
+                return !validateLength
+                  ? 'Phone number is not match length.'
+                  : '';
+              }
+
+              // const codeVerify = verify.getCountryCode();
+              // const nationalNumber = verify.getNationalNumber();
+              // const extension = verify.getExtension();
+              // const numberaw = verify.getRawInput();
+              // // const validatePhoneRegion = validate.isValidNumberForRegion(
+              // //   verify,
+              // //   _props.countryCode.code,
+              // // );
+              // console.log({
+              //   codeVerify: codeVerify,
+              //   nationalNumber: nationalNumber,
+              //   extension: extension,
+              //   numberaw: numberaw,
+              //   validateLength: validateLength,
+              //   validatePhone: validatePhone,
+              // });
             }
 
             return;
@@ -44,15 +111,42 @@ const CustomInput = ({
             nativeID={key_id}
             onChangeText={onChange}
             onBlur={onBlur}
-            value={value}
+            maxLength={_props.type === 'phone' ? 15 : undefined}
+            value={
+              // _props.type === 'phone'
+              //   ? /[0-9]/.test(value)
+              //     ? value
+              //     : ''
+              //   : value
+              // value.(0) === '0' ? '' : value
+              value.length > 0 && value.charAt(0) === '0' ? '' : value
+            }
+            onKeyPress={e => {
+              if (_props.type === 'phone') {
+                if (
+                  !/[0-9]/.test(e.nativeEvent.key) &&
+                  e.nativeEvent.key !== 'Backspace'
+                ) {
+                  e.preventDefault();
+                }
+              }
+            }}
             variant="unstyled"
             color="black"
             rounded="2xl"
+            // onKeyPress={event => {
+            //   if (_props.type === 'phone') {
+            //     if (!/[0-9]/.test(event.)) {
+            //       event.preventDefault();
+            //     }
+            //   }
+            // }}
             px={2}
             w={{
               base: base,
               md: md,
             }}
+            keyboardType={_props.type === 'phone' ? 'numeric' : undefined}
             type={
               (_props.type !== 'password' &&
                 'text' &&
@@ -71,15 +165,17 @@ const CustomInput = ({
                 </Button>
               ) : _props.type === 'phone' ? (
                 <Button
-                  outlineStyle="none"
+                  w="65px"
+                  size={10}
                   variant="unstyled"
                   endIcon={<FontAwesomeIcon icon={faCaretDown} size={10} />}
                   onPress={() => _props.modal(true)}
                 >
-                  {/* <FontAwesomeIcon icon={_icon} /> */}
                   <Text color="black"> + {_props.countryCode.callingCode}</Text>
                 </Button>
-              ) : undefined
+              ) : (
+                <></>
+              )
             }
             InputRightElement={
               _props.type === 'password' ||
