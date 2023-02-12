@@ -22,8 +22,9 @@ import TestComponent from '@src/screens/test_commponents';
 import {SlideScreen} from '@src/screens/slide';
 import {StyleSheet} from 'react-native';
 import ModalComponent from '@src/screens/modal/ModalComponent';
-import UserRegister from '@src/screens/user/userRegister';
-import UserLogin from '@src/screens/user/userLogin';
+import UserRegister from '@src/screens/authentication/userRegister';
+import UserLogin from '@src/screens/authentication/userLogin';
+import Pricing from '@src/screens/pricing/pricing';
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -33,7 +34,7 @@ export function DrawerNavigator() {
     <>
       <Drawer.Navigator
         useLegacyImplementation
-        initialRouteName={NavigatorRoute.LOGIN2}
+        initialRouteName={NavigatorRoute.PRICING}
       >
         <Drawer.Screen
           name={NavigatorRoute.SLIDE}
@@ -112,6 +113,11 @@ export function DrawerNavigator() {
             headerShown: false,
             title: 'Login_User',
           }}
+        />
+        <Drawer.Screen
+          name={NavigatorRoute.PRICING}
+          component={Pricing}
+          options={{headerShown: false, title: 'Pricing'}}
         />
       </Drawer.Navigator>
     </>

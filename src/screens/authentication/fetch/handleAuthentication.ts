@@ -19,7 +19,7 @@ export type RegisterUser = {
   first: string;
   last: string;
   email: string;
-  password: string;
+  re_password: string;
   phone: string;
 };
 

@@ -1,10 +1,11 @@
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faEyeSlash, faCaretDown} from '@fortawesome/free-solid-svg-icons';
 import {Button, IconButton, Input, Stack, Text} from 'native-base';
-import React from 'react';
+import React, {useState} from 'react';
 import {Controller} from 'react-hook-form';
 import phoneValid from 'google-libphonenumber';
 const validate = phoneValid.PhoneNumberUtil.getInstance();
+import CountryPicker, {Country} from 'react-native-country-picker-modal';
 
 // type CustomInputType = {
 //   control: Control<FieldValues, any>;
@@ -30,6 +31,16 @@ const CustomInput = ({
   _check_password,
   ..._props
 }: any) => {
+  const [popUpCountry, setPopUpCountry] = useState(false);
+
+  const onSelect = (country: Country) => {
+    _props.setCountryCode({
+      ..._props.countryCode,
+      callingCode: country.callingCode,
+      code: country.cca2,
+    });
+  };
+
   return (
     <Stack>
       <Controller
@@ -44,6 +55,22 @@ const CustomInput = ({
               return result ? '' : 'Email is Invalid.';
             }
 
+            if (_props.type === 're_password') {
+              console.log(val);
+              // min 1 number
+              // min 1-> lowercase letter
+              // min 1-> underscore
+              // min 1-> uppercase letter
+              // min 8 characters
+              // max 16 characters
+
+              const pattern =
+                /^(?=.*[0-9])(?=.*[a-z])(?=.*_)(?=.*[A-Z]).{8,16}$/;
+
+              const result = val.match(pattern);
+              return result ? '' : 'Password is too weak';
+            }
+
             if (_props.type === 'confirm_password') {
               return val !== _check_password
                 ? 'The passwords do not match'
@@ -51,7 +78,6 @@ const CustomInput = ({
             }
 
             if (_props.type === 'phone') {
-              // console.log([val, _props.countryCode.code]);
               if (val.length === 1) {
                 return 'Phone number is not match length.';
               }
@@ -83,23 +109,6 @@ const CustomInput = ({
                   ? 'Phone number is not match length.'
                   : '';
               }
-
-              // const codeVerify = verify.getCountryCode();
-              // const nationalNumber = verify.getNationalNumber();
-              // const extension = verify.getExtension();
-              // const numberaw = verify.getRawInput();
-              // // const validatePhoneRegion = validate.isValidNumberForRegion(
-              // //   verify,
-              // //   _props.countryCode.code,
-              // // );
-              // console.log({
-              //   codeVerify: codeVerify,
-              //   nationalNumber: nationalNumber,
-              //   extension: extension,
-              //   numberaw: numberaw,
-              //   validateLength: validateLength,
-              //   validatePhone: validatePhone,
-              // });
             }
 
             return;
@@ -113,13 +122,8 @@ const CustomInput = ({
             onBlur={onBlur}
             maxLength={_props.type === 'phone' ? 15 : undefined}
             value={
-              // _props.type === 'phone'
-              //   ? /[0-9]/.test(value)
-              //     ? value
-              //     : ''
-              //   : value
-              // value.(0) === '0' ? '' : value
-              value.length > 0 && value.charAt(0) === '0' ? '' : value
+              // value.length > 0 && value.charAt(0) === '0' ? '' : value
+              value
             }
             onKeyPress={e => {
               if (_props.type === 'phone') {
@@ -150,6 +154,8 @@ const CustomInput = ({
             type={
               (_props.type !== 'password' &&
                 'text' &&
+                _props.type !== 're_password' &&
+                'text' &&
                 _props.type !== 'confirm_password' &&
                 'text') ||
               _props.isEyeOn
@@ -157,6 +163,7 @@ const CustomInput = ({
                 : 'password'
             }
             InputLeftElement={
+              _props.type !== 're_password' &&
               _props.type !== 'password' &&
               _props.type !== 'confirm_password' &&
               _props.type !== 'phone' ? (
@@ -165,13 +172,23 @@ const CustomInput = ({
                 </Button>
               ) : _props.type === 'phone' ? (
                 <Button
-                  w="65px"
+                  // bgColor="transparent"
+                  ml="10px"
+                  w="55px"
                   size={10}
                   variant="unstyled"
                   endIcon={<FontAwesomeIcon icon={faCaretDown} size={10} />}
-                  onPress={() => _props.modal(true)}
+                  onPress={() => setPopUpCountry(true)}
                 >
-                  <Text color="black"> + {_props.countryCode.callingCode}</Text>
+                  <CountryPicker
+                    onSelect={onSelect}
+                    withCallingCode={true}
+                    withFlagButton={false}
+                    withFilter={true}
+                    withCallingCodeButton={true}
+                    countryCode={_props.countryCode.code}
+                    visible={popUpCountry}
+                  />
                 </Button>
               ) : (
                 <></>
@@ -179,6 +196,7 @@ const CustomInput = ({
             }
             InputRightElement={
               _props.type === 'password' ||
+              _props.type === 're_password' ||
               _props.type === 'confirm_password' ? (
                 <IconButton
                   backgroundColor="transparent"

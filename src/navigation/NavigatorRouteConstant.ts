@@ -13,4 +13,5 @@ export const NavigatorRoute = {
   MODAL: 'modal',
   REGISTER: 'register',
   LOGIN2: 'login2',
+  PRICING: 'pricing',
 };

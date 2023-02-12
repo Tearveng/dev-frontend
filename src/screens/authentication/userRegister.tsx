@@ -9,7 +9,7 @@ import {useForm} from 'react-hook-form';
 import {registerUser, RegisterUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
 import PhoneModal from './modal/modal';
-import {mapCountry} from '@screens/user/modal/mapCountry';
+import {mapCountry} from '@src/screens/authentication/modal/mapCountry';
 
 const UserRegister = ({navigation}: any) => {
   const [isEyeOn1, setEyeOn1] = useState(false);
@@ -29,7 +29,8 @@ const UserRegister = ({navigation}: any) => {
   });
 
   const [search, setSearch] = useState('');
-  const [countries, setCountries] = useState<any>([]);
+  // const data = useRef<any>(null);
+  const [countries, setCountries] = useState<any[]>([]);
 
   useEffect(() => {
     setCountries(
@@ -90,13 +91,13 @@ const UserRegister = ({navigation}: any) => {
       first: '',
       last: '',
       email: '',
-      password: '',
+      re_password: '',
       confirm_password: '',
       phone: '',
     },
   });
   const password = useRef({});
-  password.current = watch('password', '');
+  password.current = watch('re_password', '');
 
   const onSubmit = async (data: RegisterUser) => {
     const response = await registerUser(data);
@@ -110,7 +111,7 @@ const UserRegister = ({navigation}: any) => {
       accessible={false}
       style={{overflow: 'hidden'}}
     >
-      <Center mt="80px">
+      <Center mt="30px">
         <VStack space={4} alignItems="center">
           <FormControl isInvalid>
             <Stack direction="column">
@@ -173,6 +174,7 @@ const UserRegister = ({navigation}: any) => {
                     base="300px"
                     md="400px"
                     countryCode={countryCode}
+                    setCountryCode={setCountryCode}
                     modal={setModalVisible}
                     _icon={faEnvelope}
                     errors={errors.phone}
@@ -203,16 +205,27 @@ const UserRegister = ({navigation}: any) => {
                     base="300px"
                     md="400px"
                     _icon={faEye}
-                    errors={errors.password}
+                    errors={errors.re_password}
                     control={control}
                     message="Password is required"
-                    type="password"
+                    type="re_password"
                     placeholder="Password"
                     isEyeOn={isEyeOn1}
                     setEyeOn={setEyeOn1}
                   />
                 </Stack>
               </Center>
+              {/* <Center w="80" h="60px" rounded="md">
+                <Stack>
+                  <CountryPicker
+                    onSelect={onSelect}
+                    withFlag={true}
+                    withFilter={true}
+                    countryCode="AF"
+                    visible
+                  />
+                </Stack>
+              </Center> */}
 
               <Center w="80" h="60px" rounded="md">
                 <Stack>
