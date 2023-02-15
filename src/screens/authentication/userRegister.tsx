@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {VStack, Center, Stack, Text, Button, FormControl} from 'native-base';
 
 import {faUser, faEye, faEnvelope} from '@fortawesome/free-solid-svg-icons';
@@ -8,14 +8,10 @@ import {Keyboard, Platform} from 'react-native';
 import {useForm} from 'react-hook-form';
 import {registerUser, RegisterUser} from './fetch/handleAuthentication';
 import CustomInput from './custominput';
-import PhoneModal from './modal/modal';
-import {mapCountry} from '@src/screens/authentication/modal/mapCountry';
 
 const UserRegister = ({navigation}: any) => {
   const [isEyeOn1, setEyeOn1] = useState(false);
   const [isEyeOn2, setEyeOn2] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  // const [show, setShow] = useState(false);
   const [countryCode, setCountryCode] = useState({
     code: 'KH',
     callingCode: '855',
@@ -27,59 +23,6 @@ const UserRegister = ({navigation}: any) => {
       fra: '',
     },
   });
-
-  const [search, setSearch] = useState('');
-  // const data = useRef<any>(null);
-  const [countries, setCountries] = useState<any[]>([]);
-
-  useEffect(() => {
-    setCountries(
-      mapCountry().filter(item =>
-        search !== ''
-          ? item.name.common.toLowerCase().includes(search.toLowerCase())
-          : item,
-      ),
-    );
-  }, [search]);
-
-  // const [flag, setFlag] = useState<CountryCode>('KH');
-
-  // if (Platform.OS !== 'web') {
-  //   const {CountryPicker} = require('react-native-country-codes-picker');
-  //   contryPicker = (
-  //     // <View>
-  //     //   <TouchableOpacity
-  //     //     onPress={() => setShow(true)}
-  //     //     style={{
-  //     //       width: '80%',
-  //     //       height: 60,
-  //     //       backgroundColor: 'black',
-  //     //       padding: 10,
-  //     //     }}
-  //     //   >
-  //     //     <Text
-  //     //       style={{
-  //     //         color: 'white',
-  //     //         fontSize: 20,
-  //     //       }}
-  //     //     >
-  //     //       {countryCode}
-  //     //     </Text>
-  //     //   </TouchableOpacity>
-  //     //   // For showing picker just put show state to show prop
-  //     //   <
-  //     // </View>
-  //     <CountryPicker
-  //       show={show}
-  //       // when picker button press you will get the country object with dial code
-  //       pickerButtonOnPress={(item: any) => {
-  //         // setCountryCode(item.dial_code);
-  //         setShow(false);
-  //       }}
-  //       lang="en"
-  //     />
-  //   );
-  // }
 
   const {
     control,
@@ -104,7 +47,6 @@ const UserRegister = ({navigation}: any) => {
     console.log(response);
   };
 
-  // @ts-ignore
   return (
     <TouchableWithoutFeedback
       onPress={Platform.OS !== 'web' ? Keyboard.dismiss : () => {}}
@@ -166,7 +108,6 @@ const UserRegister = ({navigation}: any) => {
                   />
                 </Stack>
               </Center>
-
               <Center w="80" h="70px" rounded="md">
                 <Stack>
                   <CustomInput
@@ -175,7 +116,6 @@ const UserRegister = ({navigation}: any) => {
                     md="400px"
                     countryCode={countryCode}
                     setCountryCode={setCountryCode}
-                    modal={setModalVisible}
                     _icon={faEnvelope}
                     errors={errors.phone}
                     control={control}
@@ -183,18 +123,6 @@ const UserRegister = ({navigation}: any) => {
                     type="phone"
                     placeholder="Phone"
                   />
-                  {modalVisible && (
-                    <PhoneModal
-                      size="xl"
-                      countryCode={countryCode}
-                      setCountryCode={setCountryCode}
-                      modalVisible={modalVisible}
-                      setModalVisible={setModalVisible}
-                      setSearch={setSearch}
-                      search={search}
-                      _countries={countries}
-                    />
-                  )}
                 </Stack>
               </Center>
 
@@ -215,17 +143,6 @@ const UserRegister = ({navigation}: any) => {
                   />
                 </Stack>
               </Center>
-              {/* <Center w="80" h="60px" rounded="md">
-                <Stack>
-                  <CountryPicker
-                    onSelect={onSelect}
-                    withFlag={true}
-                    withFilter={true}
-                    countryCode="AF"
-                    visible
-                  />
-                </Stack>
-              </Center> */}
 
               <Center w="80" h="60px" rounded="md">
                 <Stack>

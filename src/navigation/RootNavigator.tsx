@@ -16,15 +16,18 @@ import {SampleDetailScreen} from '@src/screens/sample_ui/SampleDetailScreen';
 import {t} from 'i18next';
 import {Box, View} from 'native-base';
 import {NavigatorRoute} from './NavigatorRouteConstant';
-import {Image} from 'react-native';
+import {Image, StyleSheet} from 'react-native';
 import BookmarkOutline from '@src/assets/logo/outline_bookmark.png';
 import TestComponent from '@src/screens/test_commponents';
 import {SlideScreen} from '@src/screens/slide';
-import {StyleSheet} from 'react-native';
 import ModalComponent from '@src/screens/modal/ModalComponent';
 import UserRegister from '@src/screens/authentication/userRegister';
 import UserLogin from '@src/screens/authentication/userLogin';
 import Pricing from '@src/screens/pricing/pricing';
+import HomePage from '@screens/homeweb/HomePage';
+import HomePageMobile from '@screens/homemobile/HomePageMobile';
+import {Platform} from 'react-native';
+import TestingPage from '@screens/homemobile/TestingPage';
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -34,7 +37,7 @@ export function DrawerNavigator() {
     <>
       <Drawer.Navigator
         useLegacyImplementation
-        initialRouteName={NavigatorRoute.PRICING}
+        initialRouteName={NavigatorRoute.HOME_MOBILE}
       >
         <Drawer.Screen
           name={NavigatorRoute.SLIDE}
@@ -118,6 +121,21 @@ export function DrawerNavigator() {
           name={NavigatorRoute.PRICING}
           component={Pricing}
           options={{headerShown: false, title: 'Pricing'}}
+        />
+        {/*<Drawer.Screen*/}
+        {/*  name={NavigatorRoute.HOME_WEB}*/}
+        {/*  component={HomePage}*/}
+        {/*  options={{headerShown: false, title: 'Home_Web'}}*/}
+        {/*/>*/}
+        <Drawer.Screen
+          name={NavigatorRoute.HOME_MOBILE}
+          component={Platform.OS !== 'web' ? HomePageMobile : HomePage}
+          options={{headerShown: false, title: 'Home_Mobile'}}
+        />
+        <Drawer.Screen
+          name={NavigatorRoute.TESTING_PAGE}
+          component={TestingPage}
+          options={{headerShown: false, title: 'Testing_Page'}}
         />
       </Drawer.Navigator>
     </>

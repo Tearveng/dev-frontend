@@ -6,11 +6,15 @@ import {Controller} from 'react-hook-form';
 import phoneValid from 'google-libphonenumber';
 const validate = phoneValid.PhoneNumberUtil.getInstance();
 import CountryPicker, {Country} from 'react-native-country-picker-modal';
+import {Platform} from 'react-native';
 
 // type CustomInputType = {
 //   control: Control<FieldValues, any>;
-//   handleSubmit: Promise<void>;
-//   errors: {email: string};
+//   handleSubmit: (
+//     onValid: SubmitHandler<FieldValues>,
+//     onInvalid?: SubmitErrorHandler<FieldValues>,
+//   ) => (e?: React.BaseSyntheticEvent) => Promise<void>;
+//   errors: {message: string};
 //   base: string;
 //   md: string;
 //   _icon: IconDefinition;
@@ -58,9 +62,9 @@ const CustomInput = ({
             if (_props.type === 're_password') {
               console.log(val);
               // min 1 number
-              // min 1-> lowercase letter
-              // min 1-> underscore
-              // min 1-> uppercase letter
+              // min 1 -> lowercase letter
+              // min 1 -> underscore
+              // min 1 -> uppercase letter
               // min 8 characters
               // max 16 characters
 
@@ -88,30 +92,12 @@ const CustomInput = ({
                   _props.countryCode.code,
                 );
 
-                const validatePhone = validate.isValidNumber(verify);
                 const validateLength = validate.isPossibleNumber(verify);
-                const codeVerify = verify.getCountryCode();
-                const nationalNumber = verify.getNationalNumber();
-                const extension = verify.getExtension();
-                const numberaw = verify.getRawInput();
-
-                console.log({
-                  coountryCode: _props.countryCode.code,
-                  codeVerify: codeVerify,
-                  nationalNumber: nationalNumber,
-                  extension: extension,
-                  numberaw: numberaw,
-                  validateLength: validateLength,
-                  validatePhone: validatePhone,
-                });
-
                 return !validateLength
                   ? 'Phone number is not match length.'
                   : '';
               }
             }
-
-            return;
           },
         }}
         render={({field: {onChange, onBlur, value}}) => (
@@ -181,18 +167,21 @@ const CustomInput = ({
                   onPress={() => setPopUpCountry(true)}
                 >
                   <CountryPicker
+                    // containerButtonStyle={{marginTop: '-0.1px'}}
                     onSelect={onSelect}
                     withCallingCode={true}
                     withFlagButton={false}
+                    withFlag={Platform.OS !== 'web' ? true : true}
                     withFilter={true}
                     withCallingCodeButton={true}
                     countryCode={_props.countryCode.code}
+                    withEmoji={false}
                     visible={popUpCountry}
+                    excludeCountries={['AQ', 'BV', 'TF', 'HM', 'UM']}
                   />
+                  {/* <CountryPicker countryCode="AF" visible={popUpCountry} /> */}
                 </Button>
-              ) : (
-                <></>
-              )
+              ) : undefined
             }
             InputRightElement={
               _props.type === 'password' ||

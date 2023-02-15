@@ -1,14 +1,13 @@
 import {faCaretDown, faCaretUp} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import React, {useEffect} from 'react';
+import {View, Text} from 'native-base';
 import {
-  View,
-  TouchableOpacity,
-  Text,
   StyleSheet,
   LayoutAnimation,
   Platform,
   UIManager,
+  TouchableOpacity,
 } from 'react-native';
 
 const AccordionComponent = ({title, data, expand, setExpand}: any) => {
@@ -28,14 +27,23 @@ const AccordionComponent = ({title, data, expand, setExpand}: any) => {
         style={styles.row}
         onPress={() => toogle()}
       >
-        <Text style={[styles.title]}>{title}</Text>
+        <Text borderColor="gray.300" color="black" borderStyle="solid">
+          {title}
+        </Text>
         <FontAwesomeIcon icon={!expand ? faCaretDown : faCaretUp} size={10} />
       </TouchableOpacity>
       <View style={styles.parentHr} />
       {expand && (
-        <View style={styles.child}>
+        <View>
           {data.map((item: any, index: number) => (
-            <Text style={styles.childBox} key={index}>
+            <Text
+              color="black"
+              borderWidth="1"
+              borderColor="gray.300"
+              borderTopWidth={0}
+              p="15px"
+              key={index}
+            >
               {item}
             </Text>
           ))}
@@ -59,16 +67,13 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 18,
     alignItems: 'center',
-    border: '1px solid #d4d4d8',
+    // border: '5px solid red',
+    borderWidth: 1,
+    borderColor: '#d4d4d8',
+    borderTopWidth: 0,
   },
   parentHr: {
     height: 1,
     width: '100%',
-  },
-  child: {},
-  childBox: {
-    height: 70,
-    padding: 16,
-    border: '1px solid #d4d4d8',
   },
 });

@@ -14,4 +14,7 @@ export const NavigatorRoute = {
   REGISTER: 'register',
   LOGIN2: 'login2',
   PRICING: 'pricing',
+  HOME_WEB: 'home_web',
+  HOME_MOBILE: 'home_mobile',
+  TESTING_PAGE: 'testing_page',
 };
