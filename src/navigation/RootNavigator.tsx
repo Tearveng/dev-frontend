@@ -28,6 +28,7 @@ import HomePage from '@screens/homeweb/HomePage';
 import HomePageMobile from '@screens/homemobile/HomePageMobile';
 import {Platform} from 'react-native';
 import TestingPage from '@screens/homemobile/TestingPage';
+import {ViewImagePage} from '@src/screens/homeweb/ViewImagePage';
 const Stack = createStackNavigator();
 
 const Drawer = createDrawerNavigator();
@@ -37,7 +38,7 @@ export function DrawerNavigator() {
     <>
       <Drawer.Navigator
         useLegacyImplementation
-        initialRouteName={NavigatorRoute.HOME_MOBILE}
+        initialRouteName={NavigatorRoute.VIEW_UPLOAD}
       >
         <Drawer.Screen
           name={NavigatorRoute.SLIDE}
@@ -136,6 +137,11 @@ export function DrawerNavigator() {
           name={NavigatorRoute.TESTING_PAGE}
           component={TestingPage}
           options={{headerShown: false, title: 'Testing_Page'}}
+        />
+        <Drawer.Screen
+          name={NavigatorRoute.VIEW_UPLOAD}
+          component={ViewImagePage}
+          options={{headerShown: false, title: 'View_upload_page'}}
         />
       </Drawer.Navigator>
     </>

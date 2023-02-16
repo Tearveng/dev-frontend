@@ -1,8 +1,6 @@
-import React from 'react';
-import {Actionsheet} from 'native-base';
+// import React from 'react';
+// const ActionSheetUserInfo = () => {
+//   return <></>;
+// };
 
-const ActionSheetUserInfo = () => {
-  return <></>;
-};
-
-export default ActionSheetUserInfo;
+// export default ActionSheetUserInfo;

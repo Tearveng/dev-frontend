@@ -17,4 +17,5 @@ export const NavigatorRoute = {
   HOME_WEB: 'home_web',
   HOME_MOBILE: 'home_mobile',
   TESTING_PAGE: 'testing_page',
+  VIEW_UPLOAD: 'view_upload',
 };

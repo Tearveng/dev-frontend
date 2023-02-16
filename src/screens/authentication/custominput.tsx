@@ -6,7 +6,6 @@ import {Controller} from 'react-hook-form';
 import phoneValid from 'google-libphonenumber';
 const validate = phoneValid.PhoneNumberUtil.getInstance();
 import CountryPicker, {Country} from 'react-native-country-picker-modal';
-import {Platform} from 'react-native';
 
 // type CustomInputType = {
 //   control: Control<FieldValues, any>;
@@ -171,7 +170,7 @@ const CustomInput = ({
                     onSelect={onSelect}
                     withCallingCode={true}
                     withFlagButton={false}
-                    withFlag={Platform.OS !== 'web' ? true : true}
+                    withFlag={true}
                     withFilter={true}
                     withCallingCodeButton={true}
                     countryCode={_props.countryCode.code}

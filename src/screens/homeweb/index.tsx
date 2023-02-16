@@ -1,3 +1,3 @@
-import {ActionProp} from './type';
+import {ActionProp, DropZoneProps} from './type';
 
-export {ActionProp};
+export {ActionProp, DropZoneProps};
